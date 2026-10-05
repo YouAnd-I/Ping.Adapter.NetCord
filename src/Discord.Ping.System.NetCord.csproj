@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Frent" Version="0.8.0-beta" />
+    <PackageReference Include="NetCord.Hosting" Version="1.0.0-beta.22" />
+    <PackageReference Include="NetCord.Hosting.Services" Version="1.0.0-beta.22" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Discord.Ping.Data\src\Discord.Ping.Data.csproj" />
+    <ProjectReference Include="..\..\Discord.Ping.System.Frent\src\Discord.Ping.System.Frent.csproj" />
+  </ItemGroup>
+
+</Project>
