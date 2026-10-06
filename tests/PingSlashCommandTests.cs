@@ -19,6 +19,9 @@ public class PingSlashCommandTests
             Request = request;
             return Task.FromResult((TResponse)response);
         }
+
+        public IDisposable Subscribe<TNotification>(Func<TNotification, Task> handler) =>
+            throw new NotSupportedException("ping never listens for notifications");
     }
 
     [Fact]
