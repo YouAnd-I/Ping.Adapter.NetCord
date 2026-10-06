@@ -7,7 +7,6 @@ namespace Ping.Adapter.NetCord.Tests;
 
 public class PingSlashCommandTests
 {
-    // Stands in for the whole world: adapter tests need no ECS and no Discord
     private sealed class StubWorld(object response) : IWorldClient
     {
         public object? Request { get; private set; }
