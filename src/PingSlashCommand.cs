@@ -1,28 +1,29 @@
-using Discord.Ping.Data;
-using Discord.Ping.System.Frent;
-using Frent;
+using Ecs.Client;
 using Microsoft.Extensions.Hosting;
 using NetCord;
 using NetCord.Hosting.Services.ApplicationCommands;
 using NetCord.Rest;
+using Ping.Data;
 
-namespace Discord.Ping.System.NetCord;
+namespace Ping.Adapter.NetCord;
 
 public static class PingSlashCommand
 {
-    public static void AddPing(this IHost host, World world)
+    public static void AddPing(this IHost host, IWorldClient world) =>
+        host.AddSlashCommand("ping", "Ping pong! (ECS)", () => HandleAsync(world));
+
+    // Discord -> plain data -> world -> plain data -> Discord
+    public static async Task<InteractionCallbackProperties<InteractionMessageProperties>> HandleAsync(
+        IWorldClient world)
     {
-        host.AddSlashCommand("ping", "Ping pong! (ECS)", () =>
+        // Discord drops an interaction that isn't answered within 3 s
+        using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(2));
+        var pong = await world.AskAsync<PingRequest, PingResponse>(new PingRequest(), timeout.Token);
+
+        return InteractionCallback.Message(new InteractionMessageProperties
         {
-            var ping = world.Create(new PingRequestTag());
-            PingSystem.Execute(world);
-            var pong = ping.Get<PongResponse>();
-            ping.Delete();
-            return InteractionCallback.Message(new InteractionMessageProperties
-            {
-                Content = pong.Text,
-                Flags = MessageFlags.Ephemeral,
-            });
+            Content = pong.Text,
+            Flags = MessageFlags.Ephemeral,
         });
     }
 }
